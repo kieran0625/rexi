@@ -1,0 +1,490 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 
+      Theme: Rexi 4.0 - Sakura Gradient
+      Vibe: Elegant, Warm, Creative, Premium
+    */
+
+    /* Backgrounds: Warm Cream */
+    --background: 30 25% 99%;
+    /* #FDFCFB */
+    --foreground: 25 10% 12%;
+    /* #1F1C1A */
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 10% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 10% 12%;
+
+    /* Primary: Sakura Coral Red */
+    --primary: 356 78% 58%;
+    /* #F04A56 */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 356 90% 97%;
+    /* #FEF1F2 */
+    --primary-dark: 356 72% 48%;
+    /* #D33347 */
+
+    /* Secondary: Warm Stone */
+    --secondary: 30 8% 96%;
+    /* #F7F5F3 */
+    --secondary-foreground: 25 10% 12%;
+
+    --muted: 30 8% 96%;
+    --muted-foreground: 25 6% 50%;
+    /* #878482 */
+
+    /* Accent Colors - Enhanced Palette */
+    --accent: 356 90% 97%;
+    --accent-foreground: 356 78% 50%;
+
+    /* Rose Pink */
+    --accent-rose: 340 82% 62%;
+    /* #F25B8A */
+    --accent-rose-light: 340 90% 97%;
+    --accent-rose-foreground: 340 78% 50%;
+
+    /* Peach Orange */
+    --accent-peach: 24 95% 68%;
+    /* #FF9B6A */
+    --accent-peach-light: 24 95% 96%;
+    --accent-peach-foreground: 24 90% 45%;
+
+    /* Lavender Purple */
+    --accent-purple: 262 70% 70%;
+    /* #A78BFA */
+    --accent-purple-light: 262 60% 97%;
+    --accent-purple-foreground: 262 65% 55%;
+
+    /* Sky Blue */
+    --accent-blue: 200 90% 60%;
+    /* #38BDF8 */
+    --accent-blue-light: 200 85% 97%;
+    --accent-blue-foreground: 200 85% 45%;
+
+    /* Mint Green */
+    --accent-mint: 160 70% 55%;
+    /* #34D399 */
+    --accent-mint-light: 160 65% 97%;
+    --accent-mint-foreground: 160 65% 40%;
+
+    /* Legacy Orange (backward compat) */
+    --accent-orange: 24 95% 68%;
+    --accent-orange-light: 24 95% 96%;
+    --accent-orange-foreground: 24 90% 45%;
+
+    /* Semantic Colors */
+    --success: 160 70% 55%;
+    /* Mint Green */
+    --success-light: 160 65% 97%;
+    --success-foreground: 160 65% 40%;
+
+    --warning: 38 92% 60%;
+    /* #F59E0B Amber */
+    --warning-light: 38 92% 97%;
+    --warning-foreground: 38 88% 45%;
+
+    --error: 0 84% 60%;
+    /* #EF4444 */
+    --error-light: 0 84% 97%;
+    --error-foreground: 0 0% 100%;
+
+    --info: 200 90% 60%;
+    /* Sky Blue */
+    --info-light: 200 85% 97%;
+    --info-foreground: 200 85% 45%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 30 10% 92%;
+    /* #EBE8E5 */
+    --input: 30 10% 92%;
+    --ring: 356 78% 58%;
+
+    --radius: 1rem;
+  }
+
+  .dark {
+    /* Dark Mode: Deep Warm Charcoal */
+    --background: 25 8% 7%;
+    /* #121110 */
+    --foreground: 30 15% 95%;
+    /* #F5F3F0 */
+
+    --card: 25 6% 12%;
+    /* #1F1D1B */
+    --card-foreground: 30 15% 95%;
+
+    --popover: 25 6% 12%;
+    --popover-foreground: 30 15% 95%;
+
+    --primary: 356 75% 64%;
+    /* Brighter in dark mode */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 356 80% 18%;
+    /* Dark tint */
+    --primary-dark: 356 70% 55%;
+
+    --secondary: 25 6% 16%;
+    --secondary-foreground: 30 15% 95%;
+
+    --muted: 25 6% 16%;
+    --muted-foreground: 25 5% 55%;
+
+    /* Accent Colors (Dark Mode) */
+    --accent: 25 6% 16%;
+    --accent-foreground: 30 15% 95%;
+
+    /* Rose Pink */
+    --accent-rose: 340 78% 68%;
+    --accent-rose-light: 340 70% 18%;
+    --accent-rose-foreground: 340 75% 72%;
+
+    /* Peach Orange */
+    --accent-peach: 24 90% 72%;
+    --accent-peach-light: 24 80% 18%;
+    --accent-peach-foreground: 24 88% 75%;
+
+    /* Lavender Purple */
+    --accent-purple: 262 65% 75%;
+    --accent-purple-light: 262 55% 18%;
+    --accent-purple-foreground: 262 60% 78%;
+
+    /* Sky Blue */
+    --accent-blue: 200 85% 65%;
+    --accent-blue-light: 200 70% 18%;
+    --accent-blue-foreground: 200 80% 70%;
+
+    /* Mint Green */
+    --accent-mint: 160 65% 60%;
+    --accent-mint-light: 160 55% 18%;
+    --accent-mint-foreground: 160 60% 65%;
+
+    /* Legacy Orange */
+    --accent-orange: 24 90% 72%;
+    --accent-orange-light: 24 80% 18%;
+    --accent-orange-foreground: 24 88% 75%;
+
+    /* Semantic Colors (Dark Mode) */
+    --success: 160 65% 60%;
+    --success-light: 160 55% 18%;
+    --success-foreground: 160 60% 65%;
+
+    --warning: 38 88% 65%;
+    --warning-light: 38 80% 18%;
+    --warning-foreground: 38 84% 70%;
+
+    --error: 0 80% 65%;
+    --error-light: 0 70% 18%;
+    --error-foreground: 0 0% 100%;
+
+    --info: 200 85% 65%;
+    --info-light: 200 70% 18%;
+    --info-foreground: 200 80% 70%;
+
+    --destructive: 0 80% 65%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 25 5% 20%;
+    --input: 25 6% 16%;
+    --ring: 356 75% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
+  }
+}
+
+@layer utilities {
+  .rexi-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(161, 161, 170, 0.4) transparent;
+  }
+
+  .rexi-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .rexi-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .rexi-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(161, 161, 170, 0.3);
+    border-radius: 9999px;
+  }
+
+  .rexi-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(161, 161, 170, 0.5);
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Glassmorphism Utilities */
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm;
+  }
+
+  .glass-dark {
+    @apply bg-black/70 backdrop-blur-xl border border-white/10 shadow-sm;
+  }
+
+  /* Noise Texture */
+  .bg-noise {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .bg-noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+    opacity: 0.08;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  /* Text Balance */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Masks */
+  .mask-linear-fade {
+    mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  }
+
+  /* Responsive Container Utilities */
+  .responsive-container {
+    container-type: inline-size;
+    container-name: preview-area;
+  }
+
+  /* Smooth Scaling */
+  .smooth-scale {
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+      opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  /* Viewport Utilities */
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100svh;
+    /* Safe area on mobile */
+  }
+
+  .h-screen-safe {
+    height: 100vh;
+    height: 100svh;
+  }
+
+  /* Aspect Ratio Containers */
+  .aspect-3-4 {
+    aspect-ratio: 3 / 4;
+  }
+
+  /* Fluid Typography */
+  .text-fluid-sm {
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+  }
+
+  .text-fluid-base {
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+
+  .text-fluid-lg {
+    font-size: clamp(1rem, 3vw, 1.125rem);
+  }
+
+  .text-fluid-xl {
+    font-size: clamp(1.125rem, 3.5vw, 1.25rem);
+  }
+
+  /* Responsive Padding/Margin */
+  .px-responsive {
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+  }
+
+  .py-responsive {
+    padding-top: clamp(1rem, 4vh, 2rem);
+    padding-bottom: clamp(1rem, 4vh, 2rem);
+  }
+
+  /* Container Queries Support */
+  @container preview-area (max-width: 400px) {
+    .preview-content {
+      padding: 1rem;
+    }
+
+    .preview-content h1 {
+      font-size: 1.125rem;
+    }
+
+    .preview-content .text-content {
+      font-size: 0.875rem;
+    }
+  }
+
+  @container preview-area (min-width: 401px) and (max-width: 600px) {
+    .preview-content {
+      padding: 1.5rem;
+    }
+
+    .preview-content h1 {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* === Enhanced Gradients === */
+
+  /* === Sakura Gradient System === */
+
+  /* Primary Gradient (Hero/Titles) - Sakura Flow */
+  .gradient-primary {
+    background: linear-gradient(135deg,
+        hsl(var(--primary)) 0%,
+        hsl(var(--accent-rose)) 50%,
+        hsl(var(--accent-peach)) 100%);
+  }
+
+  /* Soft Background Gradient - Warm Cream */
+  .gradient-soft {
+    background: linear-gradient(to bottom right,
+        hsl(0, 0%, 100%) 0%,
+        hsl(30, 20%, 99%) 50%,
+        hsl(var(--primary-light)) 100%);
+  }
+
+  /* Dark Mode Gradient - Deep Glow */
+  .dark .gradient-soft {
+    background: linear-gradient(to bottom right,
+        hsl(25, 8%, 6%) 0%,
+        hsl(25, 8%, 10%) 50%,
+        hsla(356, 80%, 18%, 0.3) 100%);
+  }
+
+  /* Gradient Text - Pop Effect */
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg,
+        hsl(var(--primary)) 0%,
+        hsl(var(--accent-rose)) 50%,
+        hsl(var(--accent-peach)) 100%);
+  }
+
+  /* === Enhanced Shadows === */
+
+  /* Primary Glow Shadows */
+  .shadow-primary-sm {
+    box-shadow: 0 2px 8px hsla(var(--primary), 0.15);
+  }
+
+  .shadow-primary {
+    box-shadow: 0 4px 16px hsla(var(--primary), 0.2);
+  }
+
+  .shadow-primary-lg {
+    box-shadow: 0 8px 32px hsla(var(--primary), 0.25);
+  }
+
+  /* Card Shadows */
+  .shadow-card-enhanced {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .shadow-card-hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Glassmorphism Enhanced */
+  .glass-enhanced {
+    @apply bg-white/80 backdrop-blur-xl border border-white/50;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .glass-enhanced {
+    @apply bg-black/80 border-white/10;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Accent Color Utilities */
+
+  /* Rose Pink */
+  .bg-accent-rose {
+    background-color: hsl(var(--accent-rose));
+  }
+
+  .text-accent-rose {
+    color: hsl(var(--accent-rose));
+  }
+
+  /* Peach Orange */
+  .bg-accent-peach {
+    background-color: hsl(var(--accent-peach));
+  }
+
+  .text-accent-peach {
+    color: hsl(var(--accent-peach));
+  }
+
+  /* Lavender Purple */
+  .bg-accent-purple {
+    background-color: hsl(var(--accent-purple));
+  }
+
+  .text-accent-purple {
+    color: hsl(var(--accent-purple));
+  }
+
+  /* Sky Blue */
+  .bg-accent-blue {
+    background-color: hsl(var(--accent-blue));
+  }
+
+  .text-accent-blue {
+    color: hsl(var(--accent-blue));
+  }
+
+  /* Mint Green */
+  .bg-accent-mint {
+    background-color: hsl(var(--accent-mint));
+  }
+
+  .text-accent-mint {
+    color: hsl(var(--accent-mint));
+  }
+
+  /* Legacy Orange (alias to peach) */
+  .bg-accent-orange {
+    background-color: hsl(var(--accent-orange));
+  }
+
+  .text-accent-orange {
+    color: hsl(var(--accent-orange));
+  }
+}

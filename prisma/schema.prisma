@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model History {
+  id              String   @id @default(uuid())
+  originalText    String
+  generatedPrompt String
+  xhsTitle        String?
+  xhsContent      String?
+  imageUrl        String?
+  style           String?
+  status          String   @default("COMPLETED") // PENDING, PROCESSING, COMPLETED, FAILED
+  createdAt       DateTime @default(now())
+}
