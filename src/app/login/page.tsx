@@ -24,8 +24,7 @@ export default function LoginPage() {
             });
 
             if (res.ok) {
-                router.refresh();
-                router.push("/");
+                window.location.href = "/";
             } else {
                 setError("密码错误，请重试");
             }

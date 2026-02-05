@@ -13,7 +13,7 @@ build
 
 # Vercel
 .vercel
-
+.gitignore
 # Misc
 .DS_Store
 *.pem
