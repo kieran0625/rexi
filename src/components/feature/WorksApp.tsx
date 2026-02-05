@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useSWR from "swr";
@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { Copy, Download, Loader2, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Copy, Download, Loader2, Pencil, Trash2, ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
+import { useDataSync, SyncOperation } from "@/hooks/use-data-sync";
+import { useToast } from "@/hooks/use-toast";
 
 type HistoryItem = {
   id: string;
@@ -43,8 +45,10 @@ const fetcher = (url: string) => fetch(url).then((res) => {
 
 export default function WorksApp() {
   const router = useRouter();
+  const { toast } = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const [clearing, setClearing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
@@ -70,6 +74,27 @@ export default function WorksApp() {
     setCurrentPage(page);
   }, []);
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await mutate();
+      toast({
+        title: "刷新成功",
+        description: "已获取最新作品数据",
+        variant: "default",
+      });
+    } catch (e) {
+      toast({
+        title: "刷新失败",
+        description: "请检查网络连接后重试",
+        variant: "destructive",
+      });
+    } finally {
+      // Add a small delay to show the animation
+      setTimeout(() => setRefreshing(false), 500);
+    }
+  };
+
   const handleClearAll = () => {
     setShowClearDialog(true);
   };
@@ -90,6 +115,13 @@ export default function WorksApp() {
     }
   };
 
+  const { sync, isSyncing } = useDataSync({
+    onError: () => {
+      // Rollback: Re-fetch current page
+      mutate();
+    }
+  });
+
   const handleDeleteOne = (id: string, e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
@@ -102,16 +134,32 @@ export default function WorksApp() {
     if (!itemToDelete) return;
     const id = itemToDelete;
 
+    // Optimistic Update
+    mutate(
+      (currentData) => {
+        if (!currentData) return undefined;
+        return {
+          ...currentData,
+          items: currentData.items.filter((x) => x.id !== id),
+          totalCount: Math.max(0, currentData.totalCount - 1),
+        };
+      },
+      { revalidate: false }
+    );
+    
     setDeletingId(id);
+    setItemToDelete(null); // Close dialog
+
+    // If deleting currently selected item in dialog, close it
+    if (selected?.id === id) {
+      setSelected(null);
+    }
+
     try {
-      const res = await fetch(`/api/history/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("删除失败，请重试");
-      setSelected((prev) => (prev?.id === id ? null : prev));
-      setItemToDelete(null);
-      mutate(); // Revalidate SWR cache
-    } catch (e: any) {
-      const msg = e?.message || "删除失败，请重试";
-      alert(msg);
+      const op: SyncOperation = { type: "DELETE", data: { id } };
+      await sync([op]);
+    } catch (e) {
+      // Error handling is delegated to useDataSync onError
     } finally {
       setDeletingId(null);
     }
@@ -166,14 +214,23 @@ export default function WorksApp() {
             <p className="text-sm text-zinc-500">集中管理你的历史创作内容，支持查看、复制提示词与删除。</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="bg-white" onClick={() => mutate()} disabled={loading || clearing}>
+            <Button 
+              variant="outline" 
+              className="bg-white hover:bg-zinc-50 transition-all active:scale-95 group" 
+              onClick={handleRefresh} 
+              disabled={loading || clearing || refreshing}
+            >
+              <RefreshCw className={cn(
+                "h-4 w-4 mr-2 transition-transform duration-700", 
+                refreshing ? "animate-spin" : "group-hover:rotate-180"
+              )} />
               刷新
             </Button>
             <Button
               variant="destructive"
               onClick={handleClearAll}
-              disabled={loading || clearing}
-              className="shadow-sm"
+              disabled={loading || clearing || refreshing}
+              className="shadow-sm active:scale-95 transition-transform"
             >
               {clearing ? <Loader2 className="h-4 w-4 animate-spin" /> : "清空"}
             </Button>

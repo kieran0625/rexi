@@ -16,6 +16,7 @@ model History {
   imageUrl        String?
   style           String?
   status          String   @default("COMPLETED") // PENDING, PROCESSING, COMPLETED, FAILED
+  version         Int      @default(1)
   createdAt       DateTime @default(now())
 
   @@index([createdAt(sort: Desc)])

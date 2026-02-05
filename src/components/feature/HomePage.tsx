@@ -3,12 +3,25 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles, Zap, Image as ImageIcon, Wand2, Palette, Type } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface HomePageProps {
     onStart: () => void;
 }
 
 export default function HomePage({ onStart }: HomePageProps) {
+    const router = useRouter();
+
+    const handleStart = () => {
+        // Clear previous draft state to ensure a fresh start
+        if (typeof window !== "undefined") {
+            sessionStorage.removeItem("rexi:draft-state");
+            sessionStorage.removeItem("rexi:generate:last-state-key");
+            sessionStorage.removeItem("rexi:generating-task-id");
+        }
+        router.push("/generate");
+    };
+
     return (
         <div className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-noise">
 
@@ -45,7 +58,7 @@ export default function HomePage({ onStart }: HomePageProps) {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
                     <Button
                         size="lg"
-                        onClick={onStart}
+                        onClick={handleStart}
                         className="rounded-full text-lg h-14 px-10 shadow-primary hover:shadow-primary-lg transition-all hover:scale-105 hover:-translate-y-0.5 bg-gradient-to-r from-primary to-accent-rose border-0"
                     >
                         Start Creating <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />

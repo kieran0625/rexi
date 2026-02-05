@@ -64,6 +64,15 @@ export function FloatingNav() {
                     <div className="flex items-center gap-3">
                         <Link
                             href="/generate"
+                            onClick={() => {
+                                if (typeof window !== "undefined") {
+                                    sessionStorage.removeItem("rexi:draft-state");
+                                    sessionStorage.removeItem("rexi:generate:last-state-key");
+                                    sessionStorage.removeItem("rexi:generating-task-id");
+                                    // Also force clear edit work state if user explicitly clicks "New"
+                                    sessionStorage.removeItem("rexi:edit-work");
+                                }
+                            }}
                             className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-full shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] transition-all duration-300"
                         >
                             <Plus className="w-4 h-4" />

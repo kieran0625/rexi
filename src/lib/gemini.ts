@@ -31,6 +31,7 @@ export type PredictImagenResult = {
 };
 
 const DEFAULT_API_VERSIONS: ApiVersion[] = ["v1beta", "v1"];
+const BASE_URL = (process.env.GEMINI_API_BASE_URL || "https://generativelanguage.googleapis.com").replace(/\/+$/, "");
 
 function buildError(message: string, extra: Record<string, unknown>) {
   const e = new Error(message);
@@ -43,7 +44,7 @@ function getApiKeyHeader(apiKey: string) {
 }
 
 export async function listModels(apiKey: string, apiVersion: ApiVersion): Promise<ListedModel[]> {
-  const url = `https://generativelanguage.googleapis.com/${apiVersion}/models`;
+  const url = `${BASE_URL}/${apiVersion}/models`;
   const res = await fetch(url, { method: "GET", headers: { ...getApiKeyHeader(apiKey) } });
   const contentType = res.headers.get("content-type") || "";
   const isJson = contentType.includes("application/json");
@@ -150,7 +151,7 @@ export async function generateContentText(params: {
   enableGrounding?: boolean;
 }): Promise<GenerateContentTextResultWithGrounding> {
   const { apiKey, apiVersion, modelId, prompt, enableGrounding = false } = params;
-  const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelId}:generateContent`;
+  const url = `${BASE_URL}/${apiVersion}/models/${modelId}:generateContent`;
 
   const requestBody: any = {
     contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -194,7 +195,7 @@ export async function generateContentImage(params: {
   prompt: string;
 }): Promise<GenerateContentImageResult> {
   const { apiKey, apiVersion, modelId, prompt } = params;
-  const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelId}:generateContent`;
+  const url = `${BASE_URL}/${apiVersion}/models/${modelId}:generateContent`;
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getApiKeyHeader(apiKey) },
@@ -233,7 +234,7 @@ export async function predictImagen(params: {
   sampleCount?: number;
 }): Promise<PredictImagenResult> {
   const { apiKey, apiVersion, modelId, prompt, sampleCount } = params;
-  const url = `https://generativelanguage.googleapis.com/${apiVersion}/models/${modelId}:predict`;
+  const url = `${BASE_URL}/${apiVersion}/models/${modelId}:predict`;
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...getApiKeyHeader(apiKey) },

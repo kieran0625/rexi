@@ -191,12 +191,19 @@ export default function GeneratorApp({
         return null;
     }, [autoGenerate, editId]);
 
-    const [inputText, setInputText] = useState(() => String(initialDraft?.inputText ?? initialHistory?.originalText ?? initialText ?? ""));
-    const [sourceCharCount, setSourceCharCount] = useState<number>(() => {
-        if (Number.isFinite(initialDraft?.sourceCharCount)) return Number(initialDraft?.sourceCharCount);
+    const [inputText, setInputText] = useState("");
+    useEffect(() => {
+        setInputText(String(initialDraft?.inputText ?? initialHistory?.originalText ?? initialText ?? ""));
+    }, [initialDraft, initialHistory, initialText]);
+    const [sourceCharCount, setSourceCharCount] = useState(0);
+    useEffect(() => {
+        if (Number.isFinite(initialDraft?.sourceCharCount)) {
+            setSourceCharCount(Number(initialDraft?.sourceCharCount));
+            return;
+        }
         const t = String(initialDraft?.inputText ?? initialHistory?.originalText ?? initialText ?? "");
-        return t.length;
-    });
+        setSourceCharCount(t.length);
+    }, [initialDraft, initialHistory, initialText]);
     const [inputUrl, setInputUrl] = useState(() => String(initialDraft?.inputUrl ?? ""));
     const [isParsing, setIsParsing] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -603,6 +610,14 @@ export default function GeneratorApp({
         // Navigate to clean generate page
         if (editId) {
             window.location.href = "/generate";
+        } else {
+             // If not in edit mode (i.e. already on /generate), just update state directly without reload
+             // or if we want to clear URL params if any
+             const newUrl = new URL(window.location.href);
+             newUrl.searchParams.delete("edit");
+             newUrl.searchParams.delete("text");
+             newUrl.searchParams.delete("auto");
+             window.history.replaceState({}, "", newUrl.toString());
         }
     }, [currentWorkId, editId, inputText, sourceCharCount, inputUrl, generatedPrompt, imagePrompts, selectedPromptIndex, xhsContent, analysisError, warningMsg, generatedImages, displayImage, isLinkDialogOpen, isPreviewOpen, isImageViewerOpen, isPromptOpen, isStyleDialogOpen, selectedStyle, showStyleConfirm]);
 
@@ -844,7 +859,16 @@ export default function GeneratorApp({
         sessionStorage.removeItem(LAST_STATE_KEY);
         sessionStorage.removeItem(EDIT_WORK_KEY);
         if (targetId) sessionStorage.removeItem(`rexi:edit-state:${targetId}`);
-        if (editId) window.location.href = "/generate";
+        
+        if (editId) {
+             window.location.href = "/generate";
+        } else {
+             const newUrl = new URL(window.location.href);
+             newUrl.searchParams.delete("edit");
+             newUrl.searchParams.delete("text");
+             newUrl.searchParams.delete("auto");
+             window.history.replaceState({}, "", newUrl.toString());
+        }
     };
 
     const handleDownload = useCallback(() => {

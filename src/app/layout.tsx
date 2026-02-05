@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Playfair_Display } from "next/font/google"; // Distinctive typography
 import "./globals.css";
 import { FloatingNav } from "@/components/feature/FloatingNav";
+import { Toaster } from "@/components/ui/toaster";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         <main className="transition-all duration-300 md:pl-24 pb-24 md:pb-0 min-h-screen">
           {children}
         </main>
+        <Toaster />
       </body>
     </html>
   );
