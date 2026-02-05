@@ -54,39 +54,45 @@ If NOT a valid classical Chinese poem, return:
 \`\`\`
 
 ## Phase 2: Verse-by-Verse Analysis (MAX 4 verses)
-For poems with more than 4 verses, select the 4 most visually evocative verses.
+For poems with more than 4 verses, select the 4 most visually evocative and culturally significant verses.
 
 For each selected verse, analyze:
-1. **字面意思**: Direct translation/meaning
-2. **意象分析**: Key imagery (月/山/水/花 etc.)
-3. **情感色彩**: Emotional tone (悲/喜/思/愁 etc.)
-4. **视觉元素**: Scene elements for image generation
+1.  **字面意思**: Direct, clear modern Chinese translation.
+2.  **意象与画面**: Key imagery (月, 霜, 孤舟) and the visual scene it creates.
+3.  **情感色彩**: The core emotional tone (悲/喜/思/愁/旷).
+4.  **炼字赏析**: Identify the most powerful word (e.g., "绿" in "春风又绿江南岸") and explain its expressive effect.
 
-## Phase 3: Context & Theme Alignment (语境与主题契合)
-Focus on:
-- **意境还原**: Capture the mood and atmosphere of the poem
-- **时代氛围**: Match the general feeling of the dynasty (e.g., 唐代豪迈、宋代婉约)
-- **情感共鸣**: Prioritize emotional resonance over historical precision
-- **诗意表达**: Artistic interpretation is more important than literal accuracy
+## Phase 3: High School Level Deep Appreciation (深度赏析) - **CRITICAL**
+Apply standard high school poetry appreciation methodology:
 
-Note: Scientific accuracy is ONLY required for science/technology topics. 
-For poetry and literary content, prioritize artistic expression and emotional impact.
+1.  **知人论世 (Background)**: Brief context on the author's life stage or historical background relevant to this poem.
+2.  **意境 (Atmosphere)**: Describe the overall aesthetic atmosphere (e.g., 凄清, 雄浑, 恬淡).
+3.  **表现手法 (Techniques)**: Identify specific techniques used (e.g., 借景抒情, 虚实结合, 托物言志, 动静结合, 用典).
+4.  **主旨 (Theme)**: The deeper philosophical or emotional core.
 
 ## Phase 4: Image Prompt Generation
 For each verse (MAX 4), generate an art prompt:
-- **Style**: Match to dynasty (唐诗→水墨淡彩, 宋词→工笔重彩, 元曲→写意山水)
-- **Composition**: Based on verse imagery
-- **Color Palette**: Match emotional tone
-- **Quality Tags**: "masterpiece, best quality, highly detailed, traditional Chinese painting"
+-   **Style**: Match to dynasty (唐: Grand & Romantic/Ink Wash; 宋: Delicate/Realistic; 元: Expressive/Literati).
+-   **Atmosphere**: Match the poem's "Yi Jing" (意境).
+-   **Visuals**: Concrete imagery from the verse.
+-   **Quality**: "masterpiece, best quality, traditional Chinese painting style, highly detailed, 8k, cinematic lighting".
 
-## Phase 5: Xiaohongshu Content (小红书文案)
-Generate engaging, emotionally resonant content:
-- **情感共鸣**: Connect ancient poetry to modern emotions
-- **场景代入**: Create relatable scenarios for readers
-- **美学表达**: Focus on beauty, mood, and artistic appreciation
-- **主题契合**: Align content with the poem's central theme and emotions
+## Phase 5: Xiaohongshu Content (小红书文案) - "High-Score Study Note" Style
+Generate content that feels like a top-tier educational & aesthetic sharing note.
+**Structure**:
+1.  **Title**: Catchy, aesthetic title (e.g., "📜 绝美诗词 | 读懂李白的一抹乡愁").
+2.  **Poem**: The full poem text.
+3.  **📖 沉浸式解读 (Deep Dive)**:
+    *   **知人论世**: 1-2 sentences on background.
+    *   **名句赏析**: Pick the most famous lines and analyze them using **炼字** (word choices) and **意象** (imagery).
+    *   **美学意境**: Describe the mood and atmosphere.
+4.  **💡 知识点 (Knowledge Points)**: Bullet points on **表现手法** (techniques used).
+5.  **✨ 结语 (Closing)**: A short, emotional summary that resonates with modern readers.
 
-Writing style: 温暖、治愈、有诗意，让读者产生共鸣
+**Tone**:
+*   **Educational but Aesthetic**: Professional literary analysis wrapped in beautiful language.
+*   **Engaging**: Use emoticons (📜, ✨, 🌙, 🌸) appropriately.
+*   **Warm**: Connect ancient emotions to modern life.
 
 ## Output Format (Strict JSON)
 \`\`\`json
@@ -100,25 +106,25 @@ Writing style: 温暖、治愈、有诗意，让读者产生共鸣
       {
         "index": 0,
         "text": "原文诗句",
-        "literalMeaning": "字面意思",
+        "literalMeaning": "现代文翻译",
         "imagery": ["月", "霜"],
-        "emotion": "思乡之情",
-        "imagePrompt": "Chinese ink wash painting, moonlight streaming through window..."
+        "emotion": "思乡",
+        "imagePrompt": "Chinese ink wash painting..."
       }
     ],
-    "overallMeaning": "整首诗的意境",
-    "literaryDevices": ["比喻", "对仗"]
+    "overallMeaning": "整首诗的主旨",
+    "literaryDevices": ["比喻", "借景抒情"]
   },
   "imagePrompts": [
     {
       "verseIndex": 0,
       "focus": "Style Name",
-      "positive": "Full positive prompt with dynasty-appropriate style...",
+      "positive": "Full positive prompt...",
       "negative": "modern, anime, cartoon, low quality, blurry, text, watermark"
     }
   ],
-  "xhsTitle": "📜 经典赏析 | 诗名",
-  "xhsContent": "Detailed educational content..."
+  "xhsTitle": "📜 标题",
+  "xhsContent": "正文内容..."
 }
 \`\`\`
 `.trim();

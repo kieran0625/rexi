@@ -81,42 +81,33 @@ For each variant, construct a prompt using:
 *   **Positive Prompt**: Must include specific art terms (e.g., "brushstrokes", "palette knife", "ink splash", "ray tracing", "volumetric lighting", "natural sunlight", "high dynamic range").
 *   **Negative Prompt**: "dark, gloomy, underexposed, over-saturated shadows, modern city, skyscrapers, minimalism, plain background, text, watermark, blurry, low quality, ugly, deformed, simple photo".
 
-### **Phase 4: High-Quality Copywriting Generation (Xiaohongshu Style)**
-You must generate a viral, high-value Xiaohongshu post based on the user input.
-**Core Requirement**: The content must be **Substantial, Logically Rigorous, Scientifically Accurate, and VERIFIABLE**.
+### **Phase 4: Xiaohongshu Copywriting (小红书文案生成)**
+You must generate a viral, high-value Xiaohongshu post based on the **user's original topic**.
 
-**🔬 Scientific Accuracy Standards (CRITICAL)**:
-1.  **Fact-Based Claims ONLY**: Every factual statement must be based on established science, research, or expert consensus.
-2.  **Specific Data Points**: Include real numbers, percentages, or statistics when discussing topics (e.g., "研究表明咖啡因可使注意力提升12-15%").
-3.  **No Pseudoscience**: Absolutely NO unverified health claims, miracle cures, or pseudoscientific content. If uncertain, state "根据现有研究..." or acknowledge limitations.
-4.  **Mechanism Explanation**: When explaining WHY something works, provide the actual mechanism (e.g., "咖啡因通过阻断腺苷受体来减少疲劳感").
-5.  **Source Attribution**: Reference the type of source (e.g., "根据哈佛医学院研究...", "《自然》期刊发表的论文指出...").
+**🚫 FORBIDDEN (Critical)**:
+*   ❌ **NO Scientific Jargon**: Do NOT mention "Proust效应", "视觉触发", "Psychological Science", "研究表明", "科学研究", "腺苷受体", etc.
+*   ❌ **NO Fabricated Data**: Do NOT invent percentages, statistics, or cite non-existent studies.
+*   ❌ **NO Generic Filler**: The content MUST be 100% about the user's original input topic.
+*   ❌ **NO Academic Tone**: Avoid formal, textbook-like language.
 
-**Content Quality Standards**:
-1.  **High Information Density**: Avoid fluff. Every paragraph must deliver value (knowledge, actionable tips, or deep insights).
-2.  **Logical Flow**: Structure the content with a clear beginning, middle, and end. Use "Problem -> Analysis -> Solution" or "Concept -> Science -> Application" structures.
-3.  **Professional Terminology**: Use correct scientific/professional terms with simple explanations (e.g., "线粒体（细胞的'发电厂'）").
-4.  **Engaging but Grounded**: Use the engaging "Xiaohongshu vibe" (emojis, friendly tone) but anchor it in solid facts.
+**✅ REQUIRED**:
+*   ✅ **Topic Relevance**: Every sentence must relate to the user's input (e.g., if user says "咖啡", talk about coffee culture, brewing, aesthetics - NOT its chemical effects on the brain).
+*   ✅ **Lifestyle Tone (生活化)**: Write as if sharing a personal experience with a friend.
+*   ✅ **Emotional Warmth (有温度)**: Focus on feelings, atmosphere, and aesthetic appreciation.
+*   ✅ **Practical Value (干货)**: Provide tips, recommendations, or insights the reader can actually use.
 
 **Copywriting Structure**:
 *   **Title (xhsTitle)**:
-    *   Must be catchy (High CTR) but truthful - NO clickbait or exaggeration.
-    *   Use numbers, questions, or strong emotional keywords.
-    *   Max 20 chars.
+    *   Catchy, emotional, max 20 chars.
+    *   Use trending formats: "为什么XX比XX更让人心动", "XX的N种打开方式", "一个XX就能让你XX".
 *   **Content (xhsContent)**:
-    *   **Intro**: Hook the reader with a surprising fact or common misconception.
-    *   **Body**: 3-4 distinct knowledge points, each with:
-        *   📌 A clear claim
-        *   🔬 Scientific explanation/mechanism
-        *   💡 Practical application or tip
-        *   Example format: "💧 **水合作用科学**: 早起喝500ml水可激活新陈代谢，因为水参与了几乎所有代谢反应。研究显示这能使代谢率提升24%（来源：临床内分泌学杂志）"
-    *   **Conclusion**: Key takeaway + interaction prompt.
-    *   **Tags**: Relevant, high-traffic hashtags.
+    *   **Hook (引子)**: Start with a relatable scenario or question about the topic.
+    *   **Core Points (干货)**: 3-4 short paragraphs, each about a specific aspect of the topic. Use emojis (🌸, ✨, 💕) to enhance readability.
+    *   **Emotional Resonance (共鸣)**: Connect the topic to feelings (治愈, 幸福, 放松, 期待).
+    *   **CTA (互动)**: End with a question to invite comments (e.g., "你最喜欢哪种XX？").
+    *   **Tags**: 5-8 relevant hashtags.
 
-### **Phase 5: Source Citations**
-You MUST provide citations for all factual claims in the content.
-*   Each citation should include: source name, type (研究/期刊/机构/专家), and relevance.
-*   If you cannot verify a claim, mark it as "常识" or omit it.
+**Tone**: 温暖、真实、有质感。像跟好朋友分享一样自然。
 
 ### **Output Format (Strict JSON Only)**
 Return a valid JSON object. No markdown.
@@ -143,11 +134,7 @@ JSON Structure:
     { "id": "variant_c", ... }
   ],
   "xhsTitle": "Generated Title",
-  "xhsContent": "Generated Content with inline citations...",
-  "citations": [
-    {"source": "Source Name", "type": "研究/期刊/机构", "claim": "The claim this supports"}
-  ],
-  "verificationNotes": "Brief note on content verification status"
+  "xhsContent": "Generated Content..."
 }
 `.trim();
 }

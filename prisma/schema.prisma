@@ -17,4 +17,6 @@ model History {
   style           String?
   status          String   @default("COMPLETED") // PENDING, PROCESSING, COMPLETED, FAILED
   createdAt       DateTime @default(now())
+
+  @@index([createdAt(sort: Desc)])
 }

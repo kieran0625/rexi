@@ -8,10 +8,10 @@ type RewriteRequestBody = {
 
 let cachedModelChoice:
   | {
-      apiVersion: ApiVersion;
-      modelId: string;
-      expiresAt: number;
-    }
+    apiVersion: ApiVersion;
+    modelId: string;
+    expiresAt: number;
+  }
   | undefined;
 
 function buildRewritePrompt(originalText: string, currentContent: string) {
@@ -26,20 +26,29 @@ You are an expert Social Media Copywriter specializing in **Xiaohongshu (Little 
 Your goal is to **REWRITE** the current draft to make it significantly **BETTER** and **DIFFERENT**.
 Do **NOT** just output the same content again. You must change the structure, tone, or angle.
 
-**Differentiation Strategy (Pick one randomly)**:
-*   *Option A (Emotional)*: Focus on feelings, mood, and atmosphere.
-*   *Option B (Utility)*: Focus on practical tips, steps, and "how-to".
-*   *Option C (Storytelling)*: Narrate a personal experience or scenario.
+### **🚫 CRITICAL PROHIBITIONS**:
+*   ❌ **NO Scientific Jargon**: Avoid "研究表明", "科学证明", "效应", "机制" etc.
+*   ❌ **NO Off-Topic Content**: The rewrite MUST stay 100% focused on the original topic.
+*   ❌ **NO Academic Tone**: Write naturally, not like a textbook.
 
-**Core Requirements**:
-1.  **High Information Density**: Provide actionable value.
-2.  **Engaging Tone**: Use the "Xiaohongshu vibe" (emojis, friendly, relatable).
-3.  **Structure**:
-    *   **Catchy Title**: Max 20 chars, use strong hooks.
-    *   **Body**: Clear paragraphs with bullet points.
-    *   **Tags**: Relevant hashtags.
+### **Differentiation Strategy (Pick one randomly)**:
+*   *Option A (Emotional 情感向)*: Focus on feelings, mood, and atmosphere.
+*   *Option B (Utility 实用向)*: Focus on practical tips, steps, and "how-to".
+*   *Option C (Storytelling 故事向)*: Narrate a personal experience or scenario.
 
-**Output Format (Strict JSON Only)**:
+### **Core Requirements**:
+1.  **Topic Relevance (主题贴合)**: Content must directly relate to the original input.
+2.  **Lifestyle Tone (生活化)**: Write as if sharing with a friend.
+3.  **Emotional Warmth (有温度)**: Focus on aesthetic appreciation and feelings.
+4.  **Practical Value (干货)**: Provide actionable tips or insights.
+5.  **Engaging Format**: Use the "Xiaohongshu vibe" (emojis, friendly, relatable).
+
+### **Structure**:
+*   **Catchy Title**: Max 20 chars, use strong emotional hooks.
+*   **Body**: Clear paragraphs with bullet points and emojis.
+*   **Tags**: Relevant hashtags.
+
+### **Output Format (Strict JSON Only)**:
 {
   "xhsTitle": "New Title",
   "xhsContent": "New Content..."
@@ -52,7 +61,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as RewriteRequestBody;
     const originalText = (body.originalText || "").trim();
     const currentContent = (body.currentContent || "").trim();
-    
+
     // Use whatever text we have available
     const mainContext = originalText || currentContent;
 
@@ -62,7 +71,7 @@ export async function POST(req: Request) {
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ 
+      return NextResponse.json({
         xhsTitle: "✨ 演示模式 (无 API Key)",
         xhsContent: "由于未配置 GEMINI_API_KEY，无法使用 AI 重写功能。\n\n请在后台配置 API Key 以体验完整功能。"
       });
@@ -81,7 +90,7 @@ export async function POST(req: Request) {
         requiredMethod: "generateContent",
         excludeText: ["image", "imagen"],
       });
-      
+
       if (!best) {
         return NextResponse.json({ error: "No available Gemini model found" }, { status: 502 });
       }
@@ -101,7 +110,7 @@ export async function POST(req: Request) {
       // 1. Try to find JSON object pattern first
       const jsonMatch = generatedText.match(/\{[\s\S]*\}/);
       const candidate = jsonMatch ? jsonMatch[0] : generatedText;
-      
+
       // 2. Clean common Markdown artifacts
       const cleanJson = candidate
         .replace(/```json/gi, "")
@@ -111,7 +120,7 @@ export async function POST(req: Request) {
       result = JSON.parse(cleanJson);
     } catch (e) {
       console.warn("Rewrite JSON Parse Error, attempting fallback:", e);
-      
+
       // 3. Fallback: Treat raw text as content if JSON fails
       // Try to guess a title from the first line if it looks like one
       const lines = generatedText.split('\n').map(l => l.trim()).filter(Boolean);
@@ -122,8 +131,8 @@ export async function POST(req: Request) {
         // If first line is short and looks like a title (no punctuation at end, short length)
         const firstLine = lines[0];
         if (firstLine.length < 30 && !firstLine.endsWith('。')) {
-            fallbackTitle = firstLine.replace(/^["'#*]+|["'#*]+$/g, ''); // Remove quotes/markdown chars
-            fallbackContent = lines.slice(1).join('\n');
+          fallbackTitle = firstLine.replace(/^["'#*]+|["'#*]+$/g, ''); // Remove quotes/markdown chars
+          fallbackContent = lines.slice(1).join('\n');
         }
       }
 

@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
@@ -34,49 +35,40 @@ function formatDate(value: string) {
 
 const ITEMS_PER_PAGE = 6;
 
+// SWR fetcher function
+const fetcher = (url: string) => fetch(url).then((res) => {
+  if (!res.ok) throw new Error("加载失败，请重试");
+  return res.json() as Promise<HistoryResponse>;
+});
+
 export default function WorksApp() {
   const router = useRouter();
-  const [items, setItems] = useState<HistoryItem[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const [clearing, setClearing] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showClearDialog, setShowClearDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-  const [error, setError] = useState("");
   const [selected, setSelected] = useState<HistoryItem | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-
-  const fetchPage = useCallback(async (page: number) => {
-    const params = new URLSearchParams();
-    params.set("take", ITEMS_PER_PAGE.toString());
-    params.set("skip", ((page - 1) * ITEMS_PER_PAGE).toString());
-    const res = await fetch(`/api/history?${params.toString()}`);
-    if (!res.ok) throw new Error("加载失败，请重试");
-    return (await res.json()) as HistoryResponse;
-  }, []);
-
-  const loadData = useCallback(async (page: number) => {
-    setLoading(true);
-    setError("");
-    try {
-      const data = await fetchPage(page);
-      setItems(data.items);
-      setTotalCount(data.totalCount);
-      setCurrentPage(page);
-    } catch (e: any) {
-      setError(e?.message || "加载失败，请重试");
-    } finally {
-      setLoading(false);
+  // SWR for data fetching with caching
+  const { data, error, isLoading, mutate } = useSWR<HistoryResponse>(
+    `/api/history?take=${ITEMS_PER_PAGE}&skip=${(currentPage - 1) * ITEMS_PER_PAGE}`,
+    fetcher,
+    {
+      revalidateOnFocus: false, // Don't refetch when window regains focus
+      dedupingInterval: 5000, // Dedupe requests within 5 seconds
     }
-  }, [fetchPage]);
+  );
 
-  useEffect(() => {
-    loadData(1);
-  }, [loadData]);
+  const items = data?.items || [];
+  const totalCount = data?.totalCount || 0;
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+  const loading = isLoading;
+
+  const loadData = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
 
   const handleClearAll = () => {
     setShowClearDialog(true);
@@ -84,17 +76,15 @@ export default function WorksApp() {
 
   const performClearAll = async () => {
     setClearing(true);
-    setError("");
     try {
       const res = await fetch("/api/history", { method: "DELETE" });
       if (!res.ok) throw new Error("清空失败，请重试");
-      setItems([]);
-      setTotalCount(0);
       setCurrentPage(1);
       setSelected(null);
       setShowClearDialog(false);
+      mutate(); // Revalidate SWR cache
     } catch (e: any) {
-      setError(e?.message || "清空失败，请重试");
+      alert(e?.message || "清空失败，请重试");
     } finally {
       setClearing(false);
     }
@@ -113,18 +103,15 @@ export default function WorksApp() {
     const id = itemToDelete;
 
     setDeletingId(id);
-    setError("");
     try {
       const res = await fetch(`/api/history/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("删除失败，请重试");
       setSelected((prev) => (prev?.id === id ? null : prev));
       setItemToDelete(null);
-      // Re-fetch current page to handle pagination correctly
-      loadData(currentPage);
+      mutate(); // Revalidate SWR cache
     } catch (e: any) {
       const msg = e?.message || "删除失败，请重试";
-      setError(msg);
-      alert(msg); // Ensure user sees the error
+      alert(msg);
     } finally {
       setDeletingId(null);
     }
@@ -156,7 +143,7 @@ export default function WorksApp() {
     try {
       await navigator.clipboard.writeText(text);
     } catch (e) {
-      setError("复制失败，请检查浏览器权限");
+      alert("复制失败，请检查浏览器权限");
     }
   };
 
@@ -179,7 +166,7 @@ export default function WorksApp() {
             <p className="text-sm text-zinc-500">集中管理你的历史创作内容，支持查看、复制提示词与删除。</p>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" className="bg-white" onClick={() => loadData(currentPage)} disabled={loading || clearing}>
+            <Button variant="outline" className="bg-white" onClick={() => mutate()} disabled={loading || clearing}>
               刷新
             </Button>
             <Button
@@ -194,7 +181,7 @@ export default function WorksApp() {
         </div>
 
         {error ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error.message}</div>
         ) : null}
 
         {loading ? (
