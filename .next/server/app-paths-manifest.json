@@ -1,5 +1,0 @@
-{
-  "/api/history/route": "app/api/history/route.js",
-  "/(app)/works/page": "app/(app)/works/page.js",
-  "/(app)/page": "app/(app)/page.js"
-}
