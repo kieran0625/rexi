@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
         if (password === correctPassword) {
             // 设置 Cookie，有效期 30 天
-            (await cookies()).set("auth_token", "authenticated", {
+            cookies().set("auth_token", "authenticated", {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 maxAge: 60 * 60 * 24 * 30, // 30 days

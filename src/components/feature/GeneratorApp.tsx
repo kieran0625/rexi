@@ -950,11 +950,19 @@ export default function GeneratorApp({
                         {/* Text Input */}
                         <div className="relative flex-1 min-h-[200px] group/input">
                             <Textarea
-                                placeholder="描述你的灵感，例如：
-周末在阳光明媚的咖啡馆喝拿铁，穿着法式碎花裙，氛围感满满..."
+                                placeholder="描述你的灵感,例如:
+周末在阳光明媚的咖啡馆喝拿铁,穿着法式碎花裙,氛围感满满..."
                                 className="w-full h-full resize-none p-4 text-base leading-relaxed border-stone-200 bg-stone-50/50 focus:bg-white focus:ring-1 focus:ring-primary/20 rounded-xl transition-all rexi-scrollbar"
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        if (inputText.trim() && !isAnalyzing && !isGenerating) {
+                                            handleSmartGenerate();
+                                        }
+                                    }
+                                }}
                             />
                             <div className="absolute bottom-3 right-3 text-xs text-stone-400 font-medium px-2 py-1 bg-white/80 backdrop-blur rounded-md border border-stone-100">
                                 {inputText.length} 字
