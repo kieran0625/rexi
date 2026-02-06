@@ -29,6 +29,8 @@ type HistoryResponse = {
   totalCount: number;
 };
 
+const EMPTY_ITEMS: HistoryItem[] = [];
+
 function formatDate(value: string) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return value;
@@ -62,13 +64,25 @@ export default function WorksApp() {
     {
       revalidateOnFocus: false, // Don't refetch when window regains focus
       dedupingInterval: 5000, // Dedupe requests within 5 seconds
+      refreshInterval: (latest) => {
+        const hasInProgress = (latest?.items || []).some(
+          (x) => x.status === "PENDING" || x.status === "PROCESSING"
+        );
+        return hasInProgress ? 2000 : 0;
+      },
     }
   );
 
-  const items = data?.items || [];
+  const items = data?.items || EMPTY_ITEMS;
   const totalCount = data?.totalCount || 0;
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
   const loading = isLoading;
+
+  useEffect(() => {
+    if (!selected) return;
+    const latest = items.find((x) => x.id === selected.id);
+    if (latest) setSelected(latest);
+  }, [items, selected]);
 
   const loadData = useCallback((page: number) => {
     setCurrentPage(page);
