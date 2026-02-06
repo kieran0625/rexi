@@ -30,6 +30,7 @@ Do **NOT** just output the same content again. You must change the structure, to
 *   ❌ **NO Scientific Jargon**: Avoid "研究表明", "科学证明", "效应", "机制" etc.
 *   ❌ **NO Off-Topic Content**: The rewrite MUST stay 100% focused on the original topic.
 *   ❌ **NO Academic Tone**: Write naturally, not like a textbook.
+*   ❌ **NO Fake Data**: Do not invent numbers, percentages, rankings, or “studies”.
 
 ### **Differentiation Strategy (Pick one randomly)**:
 *   *Option A (Emotional 情感向)*: Focus on feelings, mood, and atmosphere.
@@ -44,9 +45,14 @@ Do **NOT** just output the same content again. You must change the structure, to
 5.  **Engaging Format**: Use the "Xiaohongshu vibe" (emojis, friendly, relatable).
 
 ### **Structure**:
-*   **Catchy Title**: Max 20 chars, use strong emotional hooks.
-*   **Body**: Clear paragraphs with bullet points and emojis.
-*   **Tags**: Relevant hashtags.
+*   **Catchy Title（20字内）**: 口语、有钩子，可用 1 个 Emoji。
+*   **Body（300–800字左右）**:
+    * 开头 2–4 句：共鸣 + 这篇笔记能带走什么 + “往下看⬇️”
+    * 正文 3–5 段，用【小标题】分节，段间用 “—————”
+    * 至少 3–5 条可执行干货（用 • 或 ✓）
+    * 每段 0–1 个 Emoji（适度）
+*   **Ending**: 总结 2–4 条 ✓ + 1 句互动提问（评论区）+ “收藏”引导（不油腻）
+*   **Tags**: 5–8 个相关话题标签（#...）
 
 ### **Output Format (Strict JSON Only)**:
 {

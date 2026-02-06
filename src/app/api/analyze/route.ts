@@ -49,7 +49,10 @@ You are an expert AI Art Director and Prompt Refactoring Specialist.
 User text: "${text}"
 
 Goal: Convert the user text into high-quality image-generation prompts and Xiaohongshu-style copywriting.
-All deliverables MUST be in English.
+
+Language rules:
+- Image generation prompts MUST be in English (positive / negative / params / variables / tips).
+- Xiaohongshu copywriting MUST be in Chinese (xhsTitle / xhsContent).
 
 ### A) Deep content analysis (extract and infer)
 1) Keywords:
@@ -81,19 +84,28 @@ Requirements:
 Negative prompt must be style-aware and include at least:
 text, watermark, logo, lowres, blurry, jpeg artifacts, deformed hands, extra fingers, bad anatomy, overexposed, underexposed, muddy shadows.
 
-### C) Xiaohongshu-style copywriting (English, XHS vibe)
-Write a viral, high-value Xiaohongshu-style post that stays strictly on the user's topic.
+### C) 小红书文案生成（中文，XHS 口吻，内容更丰满）
+基于用户原文主题生成一篇“可直接发布”的小红书笔记，内容必须更充实、有收藏价值。
 
-Forbidden:
-- No scientific/academic jargon, no invented statistics, no citations, no generic filler.
+长度要求：
+- xhsContent 约 300–800 字（中文为主），不要只写几句话。
 
-Required (XHS style, but in English):
-- Friendly, like sharing with a friend.
-- Short paragraphs (1–3 sentences), clean spacing.
-- Practical tips (3–5 bullets).
-- 1 question CTA at the end.
-- 5–8 hashtags.
-- Emojis: keep it light (title max 1–2, body about 0–1 per paragraph).
+🚫 禁止：
+- 不要学术/科普腔：禁止“研究表明 / 机制 / 效应 / 论文 / 数据来源”等。
+- 不要编造数据：不要写百分比、排行榜、虚构对比实验。
+- 不要跑题：每一句都要围绕用户原文主题。
+- 不要硬广：避免过度营销话术。
+
+✅ 必须做到（参考小红书排版习惯）：
+- 开头 2–4 句快速共鸣 + 说明“这篇笔记能带走什么”，末尾可加“往下看 ⬇️”。
+- 正文用 3–5 个小节（每节 1–3 句），用【小标题】+ 短段落，段落之间用 “—————” 分隔。
+- 至少给出 3–5 条可执行的干货清单（用 • 或 ✓ 列表）。
+- Emoji 适度：标题最多 1–2 个；正文每段 0–1 个即可，不要堆砌。
+- 结尾要有总结（✓✓✓）+ 互动提问 1 句 + 5–8 个相关话题标签（#...）。
+
+标题要求（xhsTitle）：
+- 20 字以内，口语、有钩子，可用 1 个 Emoji。
+- 优先使用：对比/数字/场景化，例如“XX 的 3 种打开方式”“为什么我更爱 XX”。
 
 ### Output (STRICT JSON ONLY)
 Return a valid JSON object. No markdown, no trailing commas.
@@ -147,8 +159,8 @@ export async function POST(req: Request) {
     if (!apiKey) {
       return NextResponse.json({
         prompt: `(Mock) Artistic oil painting of ${text}, expressive brushstrokes, dramatic lighting, masterpiece, 8k, surreal atmosphere`,
-        xhsTitle: "Inspo image, demo ✨",
-        xhsContent: "Demo mode: GEMINI_API_KEY is not configured.\n\nSet GEMINI_API_KEY to enable full prompt analysis and Xiaohongshu-style copywriting."
+        xhsTitle: "✨ 演示模式（未配置 Key）",
+        xhsContent: "由于未配置 GEMINI_API_KEY，当前为演示模式。\n\n请配置 GEMINI_API_KEY 以启用更完整的提示词分析与更丰富的小红书文案生成。"
       });
     }
 
@@ -170,8 +182,8 @@ export async function POST(req: Request) {
           {
             prompt: `(Mock/Fallback) Xiaohongshu style photo, soft natural lighting, pastel colors, high resolution, 8k, photorealistic, lifestyle vibe`,
             warning: `AI 连接失败: 无可用文本模型，已切换到演示模式`,
-            xhsTitle: "Fallback mode ⚠️",
-            xhsContent: "Could not connect to a text model, switched to offline fallback. This may be due to network or quota limits. Please try again later."
+            xhsTitle: "⚠️ 模式切换",
+            xhsContent: "由于无法连接到文本模型，已切换至离线演示模式。\n\n这可能由网络或配额限制导致，请稍后重试。"
           },
           { status: 502 }
         );
@@ -203,8 +215,8 @@ export async function POST(req: Request) {
       console.error("JSON Parse Error:", e);
       result = {
         imagePrompt: generatedText,
-        xhsTitle: "XHS-style draft ✨",
-        xhsContent: "The model did not return valid JSON. Please try again."
+        xhsTitle: "✨ 文案生成失败",
+        xhsContent: "AI 未能返回有效的 JSON 结果，请重试。"
       };
     }
 
@@ -236,8 +248,8 @@ export async function POST(req: Request) {
       {
         prompt: `(Mock/Fallback) Classical oil painting, dramatic lighting, masterpiece, 8k, highly detailed, expressive style`,
         warning: `AI 连接失败: ${msg}，已切换到演示模式`,
-        xhsTitle: "Generation interrupted ⚠️",
-        xhsContent: `We hit an error while contacting the AI (${msg}).\n\nShowing a fallback prompt. Please check your network and GEMINI_API_KEY.`
+        xhsTitle: "⚠️ 生成中断",
+        xhsContent: `连接 AI 时遇到问题 (${msg})。\n\n已返回默认兜底提示词。请检查网络与 GEMINI_API_KEY 配置。`
       },
       { status: 500 }
     );
