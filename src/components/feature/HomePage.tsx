@@ -116,8 +116,8 @@ export default function HomePage({ onStart }: HomePageProps) {
                     </div>
 
                     {/* Hero Visual / Dashboard Preview */}
-                    <div className="mt-20 relative max-w-6xl mx-auto animate-fade-in-up delay-500 perspective-1000">
-                        <div className="relative rounded-2xl border border-stone-200/60 bg-white/80 backdrop-blur-xl shadow-2xl shadow-stone-200/50 overflow-hidden transform rotate-x-12 hover:rotate-x-0 transition-transform duration-700 ease-out p-2">
+                    <div className="mt-20 relative max-w-6xl mx-auto animate-fade-in-up delay-500 [perspective:2000px]">
+                        <div className="relative rounded-2xl border border-stone-200/60 bg-white/80 backdrop-blur-xl overflow-hidden [transform:rotateX(12deg)] hover:[transform:rotateX(0deg)] transition-transform duration-700 ease-out p-2 origin-center">
                             <div className="rounded-xl overflow-hidden bg-stone-50 border border-stone-100 aspect-[16/9] relative group">
                                 {/* Mock UI Elements */}
                                 <div className="absolute top-0 left-0 right-0 h-12 bg-white border-b border-stone-100 flex items-center px-4 gap-2">
