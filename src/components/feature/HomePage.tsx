@@ -2,16 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { 
-    ArrowRight, 
-    Sparkles, 
-    Zap, 
-    Image as ImageIcon, 
-    Wand2, 
-    Palette, 
-    Type, 
-    Layers, 
-    Share2, 
+import {
+    ArrowRight,
+    Sparkles,
+    Zap,
+    Image as ImageIcon,
+    Wand2,
+    Palette,
+    Type,
+    Layers,
+    Share2,
     Smartphone,
     CheckCircle2,
     Play
@@ -44,7 +44,7 @@ export default function HomePage({ onStart }: HomePageProps) {
 
     return (
         <div className="min-h-screen bg-stone-50/50 font-sans selection:bg-rose-500/20 selection:text-rose-600 overflow-x-hidden">
-            
+
             {/* Navigation Bar */}
             <nav className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
@@ -94,21 +94,21 @@ export default function HomePage({ onStart }: HomePageProps) {
                     </h1>
 
                     <p className="text-lg md:text-xl text-stone-500 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up delay-200">
-                        The AI-powered creative studio for Xiaohongshu creators. 
+                        The AI-powered creative studio for Xiaohongshu creators.
                         Generate stunning visuals, engaging copy, and trend-setting layouts in seconds.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
-                        <Button 
+                        <Button
                             onClick={handleStart}
-                            size="lg" 
+                            size="lg"
                             className="h-14 px-8 rounded-full text-lg bg-stone-900 hover:bg-stone-800 text-white shadow-2xl shadow-stone-900/30 hover:shadow-stone-900/40 transition-all hover:-translate-y-1 w-full sm:w-auto"
                         >
                             Start Creating Free <ArrowRight className="ml-2 w-5 h-5" />
                         </Button>
-                        <Button 
-                            variant="outline" 
-                            size="lg" 
+                        <Button
+                            variant="outline"
+                            size="lg"
                             className="h-14 px-8 rounded-full text-lg border-stone-200 hover:bg-white hover:border-stone-300 text-stone-600 transition-all w-full sm:w-auto bg-white/50 backdrop-blur-sm"
                         >
                             <Play className="mr-2 w-4 h-4 fill-current" /> Watch Demo
@@ -150,7 +150,7 @@ export default function HomePage({ onStart }: HomePageProps) {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 {/* Floating Elements */}
                                 <div className="absolute top-1/4 right-1/4 bg-white p-4 rounded-2xl shadow-xl border border-stone-100 animate-float delay-100 hidden lg:block">
                                     <div className="flex items-center gap-3">
@@ -178,7 +178,7 @@ export default function HomePage({ onStart }: HomePageProps) {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[300px]">
-                        
+
                         {/* Large Card */}
                         <div className="md:col-span-2 lg:col-span-2 row-span-2 rounded-[2rem] bg-stone-50 border border-stone-100 p-8 relative overflow-hidden group hover:shadow-xl transition-all duration-500">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-rose-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-rose-200/50 transition-colors" />
@@ -191,7 +191,7 @@ export default function HomePage({ onStart }: HomePageProps) {
                                 <div className="flex-1 bg-white rounded-xl border border-stone-100 shadow-sm overflow-hidden relative">
                                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1633511090164-b43840ea1607?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center opacity-90 group-hover:scale-105 transition-transform duration-700" />
                                     <div className="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur p-3 rounded-lg text-xs font-medium text-stone-600 shadow-sm">
-                                        Prompt: "A cozy coffee shop corner, warm lighting, cinematic..."
+                                        Prompt: &ldquo;A cozy coffee shop corner, warm lighting, cinematic...&rdquo;
                                     </div>
                                 </div>
                             </div>
@@ -240,8 +240,8 @@ export default function HomePage({ onStart }: HomePageProps) {
                             <p className="text-sm text-stone-500">Auto-composition for posters.</p>
                         </div>
 
-                         {/* Wide Card */}
-                         <div className="md:col-span-2 lg:col-span-2 rounded-[2rem] bg-white border border-stone-200 p-8 relative overflow-hidden group hover:shadow-xl transition-all flex flex-col md:flex-row items-center gap-8">
+                        {/* Wide Card */}
+                        <div className="md:col-span-2 lg:col-span-2 rounded-[2rem] bg-white border border-stone-200 p-8 relative overflow-hidden group hover:shadow-xl transition-all flex flex-col md:flex-row items-center gap-8">
                             <div className="flex-1">
                                 <div className="w-10 h-10 rounded-xl bg-stone-100 flex items-center justify-center mb-4 text-stone-600">
                                     <Smartphone className="w-5 h-5" />
@@ -293,9 +293,9 @@ export default function HomePage({ onStart }: HomePageProps) {
                     <p className="text-xl text-stone-500 mb-10 max-w-2xl mx-auto">
                         Join thousands of creators using Rexi to dominate the Xiaohongshu algorithm.
                     </p>
-                    <Button 
+                    <Button
                         onClick={handleStart}
-                        size="lg" 
+                        size="lg"
                         className="h-16 px-12 rounded-full text-xl bg-stone-900 hover:bg-stone-800 text-white shadow-2xl shadow-rose-500/20 hover:shadow-rose-500/30 transition-all hover:scale-105"
                     >
                         Start Creating Now
