@@ -13,7 +13,9 @@ export function middleware(request: NextRequest) {
     const authToken = request.cookies.get("auth_token");
 
     if (!authToken) {
-        // 重定向到登录页
+        if (request.nextUrl.pathname.startsWith("/api/")) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
         return NextResponse.redirect(new URL("/login", request.url));
     }
 

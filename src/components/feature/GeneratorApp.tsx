@@ -218,6 +218,8 @@ export default function GeneratorApp({
             : null;
     });
     const [analysisError, setAnalysisError] = useState(() => String(initialDraft?.analysisError ?? ""));
+    const [parseLinkErrorCode, setParseLinkErrorCode] = useState("");
+    const [parseLinkActionUrl, setParseLinkActionUrl] = useState("");
     const [warningMsg, setWarningMsg] = useState(() => String(initialDraft?.warningMsg ?? ""));
 
     const [generatedImages, setGeneratedImages] = useState<string[]>(() => {
@@ -483,22 +485,50 @@ export default function GeneratorApp({
 
     // Handlers
     const handleParseUrl = async () => {
-        if (!inputUrl) return;
+        const url = String(inputUrl || "").trim();
+        if (!url) return;
         setIsParsing(true);
+        setAnalysisError("");
+        setParseLinkErrorCode("");
+        setParseLinkActionUrl("");
         try {
             const res = await fetch("/api/parse-link", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: inputUrl }),
+                body: JSON.stringify({ url }),
             });
-            const data = await res.json();
-            if (data.text) {
+            let data: any = null;
+            const contentType = String(res.headers.get("content-type") || "");
+            if (contentType.includes("application/json")) {
+                try {
+                    data = await res.json();
+                } catch {
+                    data = null;
+                }
+            }
+
+            if (!res.ok) {
+                if (res.status === 401) {
+                    setAnalysisError("登录已过期，请刷新页面后重新登录");
+                    return;
+                }
+                setParseLinkErrorCode(String(data?.code || ""));
+                setParseLinkActionUrl(String(data?.actionUrl || ""));
+                setAnalysisError(String(data?.error || `链接解析失败（${res.status}）`));
+                return;
+            }
+
+            if (data?.text) {
                 setInputText(data.text);
                 setSourceCharCount(String(data.text).length);
                 setIsLinkDialogOpen(false);
+                setParseLinkErrorCode("");
+                setParseLinkActionUrl("");
+                return;
             }
+            setAnalysisError(String(data?.error || "解析失败：未返回可用内容"));
         } catch (error: any) {
-            setAnalysisError("链接解析失败，请检查链接是否有效");
+            setAnalysisError("链接解析失败，请检查网络或稍后重试");
         } finally {
             setIsParsing(false);
         }
@@ -945,7 +975,7 @@ export default function GeneratorApp({
                                 <Sparkles className="w-5 h-5 text-primary" />
                                 <h2 className="text-lg font-bold text-stone-900">创意工坊</h2>
                             </div>
-                            <Dialog open={isLinkDialogOpen} onOpenChange={setIsLinkDialogOpen}>
+                            <Dialog open={isLinkDialogOpen} onOpenChange={(open) => { setIsLinkDialogOpen(open); if (open) { setAnalysisError(""); setParseLinkErrorCode(""); setParseLinkActionUrl(""); } }}>
                                 <DialogTrigger asChild>
                                     <Button variant="ghost" size="sm" className="text-xs text-stone-500 bg-stone-50 hover:bg-stone-100 rounded-full h-8 px-3">
                                         <LinkIcon className="w-3.5 h-3.5 mr-1.5" />
@@ -966,6 +996,21 @@ export default function GeneratorApp({
                                         <Button onClick={handleParseUrl} disabled={!inputUrl || isParsing} className="w-full h-12 rounded-xl">
                                             {isParsing ? <Loader2 className="animate-spin" /> : "开始解析"}
                                         </Button>
+                                        {analysisError && (
+                                            <div className="text-sm font-medium text-red-600 bg-red-50 border border-red-100 rounded-xl p-3">
+                                                <div>{analysisError}</div>
+                                                {parseLinkErrorCode === "WECHAT_CAPTCHA" && parseLinkActionUrl && (
+                                                    <a
+                                                        href={parseLinkActionUrl}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="inline-block mt-2 underline underline-offset-2"
+                                                    >
+                                                        去验证后再试
+                                                    </a>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                 </DialogContent>
                             </Dialog>

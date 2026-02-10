@@ -123,7 +123,26 @@ const config: Config = {
         'primary-sm': '0 2px 8px hsla(350, 100%, 60%, 0.15)',
         'primary': '0 4px 16px hsla(350, 100%, 60%, 0.2)',
         'primary-lg': '0 8px 32px hsla(350, 100%, 60%, 0.25)',
-      }
+      },
+      keyframes: {
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-slow": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.7" },
+        },
+      },
+      animation: {
+        "fade-in-up": "fade-in-up 0.8s ease-out forwards",
+        float: "float 6s ease-in-out infinite",
+        "pulse-slow": "pulse-slow 4s ease-in-out infinite",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
